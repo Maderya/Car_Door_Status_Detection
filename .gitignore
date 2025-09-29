@@ -1,0 +1,9 @@
+home.html
+dataset_old
+dataset_backup
+split_dataset
+rename_file.py
+test.ipynb
+screenshot.py
+*.png
+__pycache__

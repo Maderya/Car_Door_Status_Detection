@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Status Dashboard</title>
+    <!-- Link to external CSS -->
+    <!-- <link rel="stylesheet" href="./index_style.css" /> -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index_style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Car Status</h1>
+    <div class="status-container">
+      <div class="part-container">
+        <div class="part-name">Front Right</div>
+        <div class="part-status" id="front_right">Closed</div>
+      </div>
+      <div class="part-container">
+        <div class="part-name">Front Left</div>
+        <div class="part-status" id="front_left">Closed</div>
+      </div>
+      <div class="part-container">
+        <div class="part-name">Rear Right</div>
+        <div class="part-status" id="rear_right">Closed</div>
+      </div>
+      <div class="part-container">
+        <div class="part-name">Rear Left</div>
+        <div class="part-status" id="rear_left">Closed</div>
+      </div>
+      <div class="part-container">
+        <div class="part-name">Hood</div>
+        <div class="part-status" id="hood">Closed</div>
+      </div>
+
+      <!-- Clickable button -->
+      <form id="updateForm">
+        <button type="submit" class="clickable-btn">Capture</button>
+      </form>
+    </div>
+
+    <!-- JavaScript (can also be moved to a separate .js file) -->
+    <script>
+      document
+        .getElementById("updateForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const button = document.querySelector(".clickable-btn");
+          button.disabled = true;
+          button.textContent = "Updating";
+          const startTime = performance.now();
+          try {
+            const response = await fetch("/update", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const data = await response.json();
+
+            // Update Color
+            function updateStatusDisplay(elementId, status) {
+              const element = document.getElementById(elementId);
+              element.textContent = status;
+              if (status.toLowerCase() === "open") {
+                element.style.backgroundColor = "#198754";
+              } else if (status.toLowerCase() === "closed") {
+                element.style.backgroundColor = "#DC3545";
+              }
+            }
+            updateStatusDisplay("front_right", data.front_right);
+            updateStatusDisplay("front_left", data.front_left);
+            updateStatusDisplay("rear_right", data.rear_right);
+            updateStatusDisplay("rear_left", data.rear_left);
+            updateStatusDisplay("hood", data.hood);
+
+            // Update Text
+            document.getElementById("front_right").textContent =
+              data.front_right;
+            document.getElementById("front_left").textContent = data.front_left;
+            document.getElementById("rear_right").textContent = data.rear_right;
+            document.getElementById("rear_left").textContent = data.rear_left;
+            document.getElementById("hood").textContent = data.hood;
+          } catch (error) {
+            console.error("Error updating status:", error);
+            alert(
+              "Failed to update status. Check console or Window to Capture"
+            );
+          } finally {
+            button.disabled = false;
+            button.textContent = "Capture";
+            const endTime = performance.now();
+            console.log(`Execution Time: ${endTime - startTime} milliseconds`);
+          }
+        });
+    </script>
+  </body>
+</html>
