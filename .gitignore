@@ -5,5 +5,4 @@ split_dataset
 rename_file.py
 test.ipynb
 screenshot.py
-*.png
 __pycache__
