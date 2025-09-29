@@ -17,6 +17,10 @@ This project is created and tested in devices as bellow
     4. Cuda Toolkit Version : 12.8 
     5. Nvidia Driver 570.172.08
 
+    1. To run this project, run app.py
+    2. training_model.ipynb is used to train my CNN Model
+    3. split_dataset.ipynb is utilites tool to split dataset into test, train and val
+
 
 ## Python Library
 All used python library are listed in "environment.yml". You can automatically install all library i use using Anaconda
